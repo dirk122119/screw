@@ -7,7 +7,7 @@
       <div class="col-sm-4">
         <div class="card" style="width: 36rem;">
             <div class="card-body">
-              <h2 class="card-title">輸入要找的螺絲尺寸(公制)</h2>
+              <h2 class="card-title">輸入要找的螺絲尺寸(番數)</h2>
               {{ wtf.quick_form(form) }}
             </div>
         </div>
@@ -39,7 +39,7 @@
               <td>{{ loop.index }}</td>
               <td>{{ item.screwclass.number }}</td>
               <td>{{ item.screwclass.Screw_Body_Length }} mm</td>
-              <td>{{ item.screwclass.Screw_Body_Width }} mm</td>
+              <td>{{ item.screwclass.Screw_Body_Width_us }} mm</td>
               <td>{{ item.screwclass.Screw_Head_Width }} mm</td>
               <td>{{ item.screwclass.Screw_Head_length }} mm</td>
               <td>{{ item.screwclass.Screw_Head_wholenum }}</td>

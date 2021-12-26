@@ -8,7 +8,7 @@ from user.darknet import darknet
 from user.ManualInput.model import ScrewClass,AddScrewTotable,Img
 from flask_login import login_user, current_user, login_required,logout_user
 from user import db
-
+import socket
 
 AiDetect=Blueprint('AiDetect',__name__)
 
@@ -27,6 +27,10 @@ def AI_DataInput_UK():
         table_list.append(item)
 
     if form.validate_on_submit():
+        flash("已接收啟動訊號",category='success')
+        print("********************************")
+        print("******已接收啟動訊號***********")
+        print("********************************")
         Body_Length=form.Body_Length.data
         Body_Width=form.Body_Width.data
         Head_Width=form.Head_Width.data
@@ -45,6 +49,7 @@ def AI_DataInput_UK():
             'star':'星型',
             'sp_a':'特殊型A',
         }
+        '''
         ##========================================##
         ##=============Load YOLO cfg===============##
         ##========================================##
@@ -61,7 +66,7 @@ def AI_DataInput_UK():
         pts = np.array(eval(coords), dtype = "float32")
 
         warped = imgwrap.four_point_transform(img1, pts)
-        flash("start")
+    
         network, class_names, class_colors = darknet.load_network(
                 cfg_file,
                 data_file,
@@ -83,8 +88,27 @@ def AI_DataInput_UK():
         image = darknet.draw_boxes(detections, frame_resized, class_colors)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         cv2.imwrite(os.path.abspath(os.getcwd())+"/images/predict.png", image, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+'''
+        img1=simple_camera.show_camera()
+        HOST = '0.0.0.0'
+        PORT = 7000
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((HOST, PORT))
+
+
+        outdata ='images/1.png'
+        print('send: ' + outdata)
+        s.send(outdata.encode())
+        indata = s.recv(1024)
+        print("receive : "+indata.decode())
+
+        if indata.decode()=="no_object":
+            flash("無待辨識物",category='danger')
+            return redirect(url_for('AiDetect.AI_DataInput_UK'))
+        flash("執行辨識 ",category='success')
         if not ScrewClass.query.filter_by(
-            Screw_Head_Type =Headtype_dict[detections[0][0]],
+            Screw_Head_Type =Headtype_dict[indata.decode()],
             Screw_Head_length = Head_Legth,
             Screw_Head_Width = Head_Width,
             Screw_Body_Length=Body_Length,
@@ -92,11 +116,11 @@ def AI_DataInput_UK():
             Screw_coat=coat_dict[Coat],
             Screw_label=label_dict[Head_Label]
             ).all():
-            flash("找不到對應的螺絲")
+            flash("找不到對應的螺絲",category='danger')
             return redirect(url_for('AiDetect.AI_DataInput_UK'))
         else:
             find_screw=ScrewClass.query.filter_by(
-                Screw_Head_Type =Headtype_dict[detections[0][0]],
+                Screw_Head_Type =Headtype_dict[indata.decode()],
                 Screw_Head_length = Head_Legth,
                 Screw_Head_Width = Head_Width,
                 Screw_Body_Length=Body_Length,
@@ -105,12 +129,13 @@ def AI_DataInput_UK():
                 Screw_label=label_dict[Head_Label]
             ).first()
             add_item=AddScrewTotable(user_name=current_user.username,screw_number=find_screw.number)
+            
             if not AddScrewTotable.query.filter_by(screw_number=find_screw.number).all():
                 db.session.add(add_item)
                 db.session.commit()
-                flash("加入"+str(find_screw.number))
+                flash("加入編號 : "+str(find_screw.number),category='success')
             else:
-                flash("以存在"+str(find_screw.number))
+                flash("以存在"+str(find_screw.number),category='danger')
             return redirect(url_for('AiDetect.AI_DataInput_UK'))
 
     return render_template('AiDetect/OpenCamera_uk.html',form=form,table_list=table_list)
@@ -145,7 +170,9 @@ def AI_DataInput_US():
             'star':'星型',
             'sp_a':'特殊型A',
         }
+
         BodyWidth_dict={"1":"#1","2":"#2","3":"#3","4":"#4","5":"#5","6":"#6","7":"#7","8":"#8","9":"#9","10":"#10","11":"#11","12":"#12"}
+        '''
         ##========================================##
         ##=============Load YOLO cfg===============##
         ##========================================##
@@ -184,8 +211,27 @@ def AI_DataInput_US():
         image = darknet.draw_boxes(detections, frame_resized, class_colors)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         cv2.imwrite(os.path.abspath(os.getcwd())+"/images/predict.png", image, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        '''
+        img1=simple_camera.show_camera()
+        HOST = '0.0.0.0'
+        PORT = 7000
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((HOST, PORT))
+
+
+        outdata ='images/1.png'
+        print('send: ' + outdata)
+        s.send(outdata.encode())
+        indata = s.recv(1024)
+        print("receive : "+indata.decode())
+
+        if indata.decode()=="no_object":
+            flash("無待辨識物",category='danger')
+            return redirect(url_for('AiDetect.AI_DataInput_US'))
+        flash("執行辨識 ",category='success')
         if not ScrewClass.query.filter_by(
-            Screw_Head_Type =Headtype_dict[detections[0][0]],
+            Screw_Head_Type =Headtype_dict[indata.decode()],
             Screw_Head_length = Head_Legth,
             Screw_Head_Width = Head_Width,
             Screw_Body_Length=Body_Length,
@@ -193,11 +239,11 @@ def AI_DataInput_US():
             Screw_coat=coat_dict[Coat],
             Screw_label=label_dict[Head_Label]
             ).all():
-            flash("找不到對應的螺絲")
+            flash("找不到對應的螺絲",category='danger')
             return redirect(url_for('AiDetect.AI_DataInput_US'))
         else:
             find_screw=ScrewClass.query.filter_by(
-                Screw_Head_Type =Headtype_dict[detections[0][0]],
+                Screw_Head_Type =Headtype_dict[indata.decode()],
                 Screw_Head_length = Head_Legth,
                 Screw_Head_Width = Head_Width,
                 Screw_Body_Length=Body_Length,
@@ -209,12 +255,13 @@ def AI_DataInput_US():
             if not AddScrewTotable.query.filter_by(screw_number=find_screw.number).all():
                 db.session.add(add_item)
                 db.session.commit()
-                flash("加入"+str(find_screw.number))
+                flash("加入"+str(find_screw.number),category='success')
             else:
-                flash("以存在"+str(find_screw.number))
+                flash("以存在"+str(find_screw.number),category='danger')
             return redirect(url_for('AiDetect.AI_DataInput_US'))
 
     return render_template('AiDetect/OpenCamera_us.html',form=form,table_list=table_list)
+    
 @AiDetect.route('/test', methods=['GET', 'POST'])
 def OpenCamera():
 

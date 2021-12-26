@@ -57,11 +57,13 @@ def show_camera():
         fram3=np.hstack((img1,img2))
         ##cv2.imshow("CSI Camera1", img1)
         ##cv2.imshow("CSI Camera2", img2)
-        cv2.imshow('combocam',fram3)
-        cv2.moveWindow('combocam2',0,500)
-        if cv2.waitKey(1) & 0xFF == ord('s'):
-            cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
-            break
+        ##cv2.imshow('combocam',fram3)
+        ##cv2.moveWindow('combocam2',0,500)
+        ##if cv2.waitKey(1) & 0xFF == ord('s'):
+        ##    cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        ##    break
+        cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        break
         '''
         if cv2.waitKey(1)& 0xFF == ord('c'):
             cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
@@ -72,7 +74,6 @@ def show_camera():
         '''    
     cap1.release()
     cap2.release()
-    cv2.destroyAllWindows()
     return img1
         
 
