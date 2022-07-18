@@ -28,7 +28,7 @@ class FormRegister(Form):
     password2 = PasswordField(u'密碼驗證', validators=[
         validators.DataRequired()
     ])
-    submit = SubmitField(u'regist')
+    submit = SubmitField(u'註冊')
     """
     無法驗證
     
@@ -94,7 +94,7 @@ class FormResetPassword(Form):
     password_confirm = PasswordField('Confirm PassWord', validators=[
         validators.DataRequired()
     ])
-    submit = SubmitField('Reset Password')
+    submit = SubmitField('重製密碼')
 
 
 
@@ -113,7 +113,7 @@ class FormResetPasswordMail(Form):
     password_confirm = PasswordField('Confirm PassWord', validators=[
         validators.DataRequired()
     ])
-    submit = SubmitField('Send Confirm')
+    submit = SubmitField('重製密碼')
 
     def validate_email(self, field):
         """

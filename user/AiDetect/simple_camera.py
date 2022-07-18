@@ -49,31 +49,31 @@ def show_camera():
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
     print(gstreamer_pipeline(flip_method=0))
     cap1 = cv2.VideoCapture(gstreamer_pipeline(sensor_id=0,flip_method=0))
-    cap2 = cv2.VideoCapture(gstreamer_pipeline(sensor_id=1,flip_method=0))
+    ##cap2 = cv2.VideoCapture(gstreamer_pipeline(sensor_id=1,flip_method=0))
     num=1
     while(True):
         ret_val, img1 = cap1.read()
-        ret_val, img2 = cap2.read()
-        fram3=np.hstack((img1,img2))
+        ##ret_val, img2 = cap2.read()
+        ##fram3=np.hstack((img1,img2))
         ##cv2.imshow("CSI Camera1", img1)
         ##cv2.imshow("CSI Camera2", img2)
         ##cv2.imshow('combocam',fram3)
         ##cv2.moveWindow('combocam2',0,500)
-        ##if cv2.waitKey(1) & 0xFF == ord('s'):
-        ##    cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
-        ##    break
-        cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        
+        cv2.imwrite(os.path.abspath(os.getcwd())+"/images/1.png", img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        ##cv2.imwrite(os.path.abspath(os.getcwd())+"/images/2.png", img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
         break
-        '''
-        if cv2.waitKey(1)& 0xFF == ord('c'):
-            cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
-            
-            print(num)
-            print("capture----->"+os.path.abspath(os.getcwd())+"/images/%d.png"%(num))
-            num=num+1
-        '''    
+        
+        ##if cv2.waitKey(1)& 0xFF == ord('c'):
+        ##    cv2.imwrite(os.path.abspath(os.getcwd())+"/images/%d.png"%(num), img1, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        ##    
+        ##    print(num)
+        ##    print("capture----->"+os.path.abspath(os.getcwd())+"/images/%d.png"%(num))
+         ##   num=num+1
+         ##   break
+        
     cap1.release()
-    cap2.release()
+    ##cap2.release()
     return img1
         
 

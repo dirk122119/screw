@@ -1,4 +1,5 @@
-from flask import Flask,url_for,flash
+import imp
+from flask import Flask,url_for,flash,render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import redirect
@@ -36,11 +37,15 @@ from user.UserData.view import UserData
 from user.ManualInput.view import ManualInput
 from user.AiDetect.view import AiDetect
 from user.QuotationSheet.view import QuotationSheet
-
+from user.Database.view import Database
+@app.route('/')
+def index():
+    return render_template('UserData/base.html')
 app.register_blueprint(UserData,url_prefix='/user')
 app.register_blueprint(ManualInput,url_prefix='/Manual')
 app.register_blueprint(AiDetect,url_prefix='/AiDetect')
 app.register_blueprint(QuotationSheet,url_prefix='/QuotationSheet')
+app.register_blueprint(Database,url_prefix='/Database')
 
 from  user.UserData.model import UserRegister
 from user.ManualInput.model import ScrewClass,AddScrewTotable,Img
@@ -63,8 +68,8 @@ class MyAdminIndexView(AdminIndexView):
 
 admin=Admin(app,index_view=MyAdminIndexView())
 admin.add_view(MyModeView(UserRegister,db.session,category="user_database"))
-admin.add_view(MyModeView(ScrewClass,db.session,category="rose_database"))
+admin.add_view(MyModeView(ScrewClass,db.session,category="screw_database"))
 admin.add_view(MyModeView(AddScrewTotable,db.session,category="table"))
-admin.add_view(MyModeView(Img,db.session,category="rose_database"))
+
 if __name__ == '__main__':
-    print(pjdir)
+    print("init")

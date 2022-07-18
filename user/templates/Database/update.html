@@ -1,0 +1,52 @@
+{% extends "UserData/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+
+<div class="row">
+    <div class="container">
+          <div class="card" style="width: 36rem;">
+              <div class="card-body">
+                <h1>更新螺絲編號 ：  {{ number}}</h1>
+                <form method='post' action= {{ url_for('Database.Update_datable',number=number) }}>
+
+                  <h3>{{form.Screw_number.label}}</h3>
+                  <h3>{{form.Screw_number}}<h3>
+
+                  <h3>{{form.Headtype.label}}</h3>
+                  <h3>{{form.Headtype}}<h3>
+
+                  <h3>{{form.Head_Label.label}}</h3>
+                  <h3>{{form.Head_Label}}<h3>
+
+                  <h3>{{form.Head_Whole_Num.label}}</h3>
+                  <h3>{{form.Head_Whole_Num}}<h3>
+
+                  <h3>{{form.Head_Legth.label}}</h3>
+                  <h3>{{form.Head_Legth}}<h3>
+
+                  <h3>{{form.Head_Width.label}}</h3>
+                  <h3>{{form.Head_Width}}<h3>
+
+                  <h3>{{form.Body_Length.label}}</h3>
+                  <h3>{{form.Body_Length}}<h3>
+
+                  <h3>{{form.Body_Width.label}}</h3>
+                  <h3>{{form.Body_Width}}<h3>
+
+                  <h3>{{form.Body_Width_us.label}}</h3>
+                  <h3>{{form.Body_Width_us}}<h3>
+                  
+                  <h3>{{form.Price.label}}</h3>
+                  <h3>{{form.Price}}<h3>
+
+                  <h3>{{form.Coat.label}}</h3>
+                  <h3>{{form.Coat}}<h3>
+                  {{ form.submit() }}
+
+                </form>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock page_content %}

@@ -24,6 +24,7 @@
                      <th scope="col">螺絲編號</th>
                      <th scope="col">身長</th>
                      <th scope="col">身直徑</th>
+                     <th scope="col">身直徑(#)</th>
                      <th scope="col">頭寬</th>
                      <th scope="col">頭長</th>
                      <th scope="col">頭部鑿洞數</th>
@@ -37,23 +38,23 @@
                </thead>
                <tbody>
                   {% for item in table_list %}
-                  {% if item.chose %}
                   <tr>
                      <td id="index_{{ loop.index|string}}">{{ loop.index }}</td>
                      <td id="name_{{ loop.index|string}}">{{ item.screwclass.number }}</td>
                      <td id="Body_Length_{{ loop.index|string}}">{{ item.screwclass.Screw_Body_Length }} mm</td>
                      <td id="Body_Width_{{ loop.index|string}}">{{ item.screwclass.Screw_Body_Width }} mm</td>
+                     <td id="Body_Width_us{{ loop.index|string}}">{{ item.screwclass.Screw_Body_Width_us }}</td>
                      <td id="Head_Width_{{ loop.index|string}}">{{ item.screwclass.Screw_Head_Width }} mm</td>
                      <td id="Head_length_{{ loop.index|string}}">{{ item.screwclass.Screw_Head_length }} mm</td>
                      <td id="Head_wholenum_{{ loop.index|string}}">{{ item.screwclass.Screw_Head_wholenum }}</td>
                      <td id="Screw_Head_Type_{{ loop.index|string}}">{{ item.screwclass.Screw_Head_Type }}</td>
                      <td id="Screw_coat_{{ loop.index|string}}">{{ item.screwclass.Screw_coat }}</td>
                      <td id="price_{{ loop.index|string}}">{{ item.screwclass.ScrewPrice }} NTD</td>
-                     <td><input type="number" name="number_{{ loop.index|string}}" value=1 min="1"></td>
+                     <td><input type="number" name="number_{{ loop.index|string}}" value=1 min="0"></td>
                      <td id="totalprice_{{ loop.index|string}}">{{ item.screwclass.ScrewPrice }} NTD</td>
                      <td id="ratio_{{ loop.index|string}}">{{  item.screwclass.ScrewPrice/total_price*100 }}%</td>
                   </tr>
-                  {% endif %}
+                 
                   {% endfor %}
                </tbody>
                <tfoot>
@@ -70,6 +71,7 @@
                      <th scope="col"></th>
                      <th scope="col"></th>
                      <th scope="col" id="demo"> {{ total_price }} NTD</th>
+                     <th scope="col"></th>
                </tfoot>
             </table>
 
@@ -82,8 +84,9 @@
     
 
       <h2>
-         <button id="btnExport" onclick="clic2csv();">匯出excel</button>
+      <input type="submit" id="submit_button" value="Download csv" onclick="return clic2csv()"/>
       </h2>
+   
 
 <div class="row" style="display:none">
    <table id="nonshow_table" class="display" cellspacing="0" width="100%">
@@ -93,6 +96,7 @@
             <th scope="col">螺絲編號</th>
             <th scope="col">身長</th>
             <th scope="col">身直徑</th>
+            <th scope="col">身直徑(＃)</th>
             <th scope="col">頭寬</th>
             <th scope="col">頭長</th>
             <th scope="col">頭部鑿洞數</th>
@@ -106,12 +110,14 @@
       </thead>
       <tbody>
          {% for item in table_list %}
+        
          <tr>
             <td id="excel_index_{{ loop.index|string}}"></td>
             <td id="excel_name_{{ loop.index|string}}"></td>
             <td id="excel_Body_Length_{{ loop.index|string}}"></td>
             <td id="excel_Body_Width_{{ loop.index|string}}"></td>
             <td id="excel_Head_Width_{{ loop.index|string}}"></td>
+            <td id="excel_Head_Width_us_{{ loop.index|string}}"></td>
             <td id="excel_Head_length_{{ loop.index|string}}"></td>
             <td id="excel_Head_wholenum_{{ loop.index|string}}"></td>
             <td id="excel_Screw_Head_Type_{{ loop.index|string}}"></td>
@@ -120,10 +126,11 @@
             <td id="excel_number_{{ loop.index|string}}"></td>
             <td id="excel_totalprice_{{ loop.index|string}}"></td>
          </tr>
+         
          {% endfor %}
       </tbody>
       <tfoot>
-         <th scope="col"></th>
+            <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
@@ -135,18 +142,23 @@
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col" id="excel_demo"> NTD</th>
+            <th scope="col"></th>
       </tfoot>
    </table>
 </div>
 
+      
+     
 
       <script>
-         var num_list=[];
+      var num_list=[];
         $(document).ready(function ()
         {
 
-            var table = $('#example').DataTable();
-            
+            var table = $('#example').DataTable({
+        "lengthMenu": [[-1,10, 25, 50,], ["ALL",10, 25, 50]]
+    });
+
 
             // Handle form submission event 
             $('#frm-example').on('submit', function(e)
@@ -174,16 +186,21 @@
                //$('#example-console-form').text(data);
 
                var num_data=data.toString().split("&")
+               
                var total_out=0
+
                for (let i = 0; i < num_data.length; i++)
                {
                   var id_num=i+1
                   var price=document.getElementById("price_"+id_num.toString()).innerHTML
                   var num=num_data[i].split("=")[1]
-                  
-                  //alert("price :"+Number(price.split(' ')[0])+"\n"+"num : "+Number(num))
+                  /*alert("num_data:"+num)
+                  alert("price :"+Number(price.split(' ')[0])+"\n"+"num : "+Number(num))*/
                   document.getElementById("totalprice_"+id_num.toString()).innerHTML = (Number(price.split(' ')[0])*Number(num)).toString()+" NTD"
                   total_out=total_out+Number(price.split(' ')[0])*Number(num)
+
+
+                  
                }
                for (let i = 0; i < num_data.length; i++)
                {
@@ -198,6 +215,7 @@
                   document.getElementById("excel_Body_Length_"+id_num.toString()).innerHTML=document.getElementById("Body_Length_"+id_num.toString()).innerHTML
                   document.getElementById("excel_Body_Width_"+id_num.toString()).innerHTML=document.getElementById("Body_Width_"+id_num.toString()).innerHTML
                   document.getElementById("excel_Head_Width_"+id_num.toString()).innerHTML=document.getElementById("Head_Width_"+id_num.toString()).innerHTML
+                  document.getElementById("excel_Head_Width_us_"+id_num.toString()).innerHTML=document.getElementById("Head_Width_"+id_num.toString()).innerHTML
                   document.getElementById("excel_Head_length_"+id_num.toString()).innerHTML=document.getElementById("Head_length_"+id_num.toString()).innerHTML
                   document.getElementById("excel_Head_wholenum_"+id_num.toString()).innerHTML=document.getElementById("Head_wholenum_"+id_num.toString()).innerHTML
                   document.getElementById("excel_Screw_Head_Type_"+id_num.toString()).innerHTML=document.getElementById("Screw_Head_Type_"+id_num.toString()).innerHTML
@@ -272,7 +290,19 @@
 
             download_link.click();
          }
-
       </script>
+
+<script type=text/javascript>
+   $(function() {
+      $('#submit_button').on('click', function(e) {
+         e.preventDefault()
+         $.getJSON('/QuotationSheet/remove_item',
+            function(data) {
+         //do nothing
+         });
+         return false;
+      });
+   });
+</script>
 
 {% endblock page_content %}

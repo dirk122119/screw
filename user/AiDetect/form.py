@@ -5,117 +5,62 @@ from flask import flash
 from wtforms.fields.core import SelectField
 
 
+from user.ManualInput.model import ScrewClass
+from user import db
+items=ScrewClass.query.all()
+
+def wholenum2choice(items):
+    unique_wholenum=[]
+    dic_wholenum=[]
+    for item in items:
+        if item.Screw_Head_wholenum not in unique_wholenum:
+            unique_wholenum.append(item.Screw_Head_wholenum)
+    for indx,item in enumerate(unique_wholenum):
+        dic_wholenum.append((indx,item))
+    return dic_wholenum
+
+def headlabel2choice(items):
+    unique_headlabel=[]
+    dic_headlabel=[]
+    for item in items:
+        if item. Screw_label not in unique_headlabel:
+            unique_headlabel.append(item.Screw_label)
+    for indx,item in enumerate(unique_headlabel):
+        dic_headlabel.append((indx,item))
+    return dic_headlabel
+
+def coat2choice(items):
+    unique_coat2choice=[]
+    dic_coat2choice=[]
+    for item in items:
+        if item.Screw_coat  not in unique_coat2choice:
+            unique_coat2choice.append(item.Screw_coat)
+    for indx,item in enumerate(unique_coat2choice):
+        dic_coat2choice.append((indx,item))
+    return dic_coat2choice
 
 class Form_AI_uk(Form):
     '''
     手動輸入要找的螺絲資料
-    '''
-
-    Body_Length=FloatField(u'身長(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Body_Width=FloatField(u'身直徑(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Head_Width=FloatField(u'頭寬(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Head_Legth=FloatField(u'頭長(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Head_Label=SelectField('標籤',choices=
-    [
-        ('NO','無標籤'),
-        ('SFS','SFS'),
-        ('@','@'),
-        ('SL','SL'),
-        ('PHI','PHI'),
-        ('SP','SP'),
-        ('UK','UK'),
-    ])
-
-    Coat=SelectField('鍍膜種類',choices=[('classA','白鋅'),('classB','黃鋅'),('classC','黑鋅')])
-
+    '''    
+    Head_Label=SelectField('標籤',choices=headlabel2choice(items))
+    Coat=SelectField('鍍膜種類',choices=coat2choice(items))
 
     submit = SubmitField(u'查詢')
 
-    def validate_Head_Width(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
-    def validate_Head_Legth(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
-    def validate_Body_Length(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
-    def validate_Body_Width(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
 
 
 class Form_AI_us(Form):
     '''
     手動輸入要找的螺絲資料
     '''
+    Head_Label=SelectField('標籤',choices=headlabel2choice(items))
+    Coat=SelectField('鍍膜種類',choices=coat2choice(items))
 
-    Body_Length=FloatField(u'身長(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Body_Width_us=SelectField('身直徑(番數)',choices=
-    [
-        ('1','#1'),('2','#2'),('3','#3'),('4','#4'),('5','#5'),('6','#6'),('7','#7'),('8','#8'),('9','#9'),('10','#10'),('11','#11'),('12','#12')
-    ])
-
-    Head_Width=FloatField(u'頭寬(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Head_Legth=FloatField(u'頭長(mm)', validators=[
-        validators.DataRequired()
-    ])
-
-    Head_Label=SelectField('標籤',choices=
-    [
-        ('NO','無標籤'),
-        ('SFS','SFS'),
-        ('@','@'),
-        ('SL','SL'),
-        ('PHI','PHI'),
-        ('SP','SP'),
-        ('UK','UK'),
-    ])
-
-    Coat=SelectField('鍍膜種類',choices=[('classA','白鋅'),('classB','黃鋅'),('classC','黑鋅')])
+    submit = SubmitField(u'查詢')
 
 
     submit = SubmitField(u'查詢')
 
-    def validate_Head_Width(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
-    def validate_Head_Legth(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
-    def validate_Body_Length(self,field):
-        if field.data>200:
-            raise ValidationError('超過200mm')
-        if field.data<1:
-            raise ValidationError('小於1mm')
+
     

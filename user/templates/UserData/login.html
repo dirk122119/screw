@@ -3,7 +3,6 @@
 {% block page_content %}
 
             <h5 class="card-title">登入</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Welcome To My Blog</h6>
 
             <form action = "{{url_for('UserData.login')}}" method = "POST">
                 {{ form.csrf_token }}
@@ -22,6 +21,9 @@
                     <p>忘記密碼
                         <a href="{{ url_for('UserData.reset_password') }}">點選重置</a>
                     </p>
+                    <p>沒有帳號？
+                        <a href="{{ url_for('UserData.register') }}">點選註冊</a>
+                    </p>   
                 </fieldset>
             </form>
 {% endblock page_content %}

@@ -1,6 +1,4 @@
 migrations/
-
-new/
-
+user/darknet/
 user/static/data/data2.sqlite
 user/static/data/register.sqlite2

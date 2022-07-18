@@ -31,7 +31,7 @@ def register():
         )
         db.session.add(user)
         db.session.commit()
-        return 'Success Thank You'
+        return redirect(url_for('UserData.login'))
     print(form.validate_on_submit())
     return render_template('UserData/register.html', form=form)
 
